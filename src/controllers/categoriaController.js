@@ -16,6 +16,9 @@ export const crearCategoria = async (req, res) => {
 
 export const obtenerCategorias = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Solo los administradores pueden realizar esta operación" });
+    }
     const categorias = await Categoria.findAll({
       where: { activo: true }
     });
@@ -28,6 +31,9 @@ export const obtenerCategorias = async (req, res) => {
 
 export const obtenerCategoriaPorId = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Solo los administradores pueden realizar esta operación" });
+    }
     const categoria = await Categoria.findOne({
       where: { id: req.params.id, activo: true }
     });

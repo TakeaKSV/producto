@@ -33,6 +33,9 @@ export const crearProducto = async (req, res) => {
 
 export const obtenerProductos = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Solo los administradores pueden realizar esta operación" });
+    }
     const productos = await Producto.findAll({
       include: [{ model: Categoria, attributes: ['id', 'nombre'] }],
       where: { activo: true }
@@ -46,6 +49,10 @@ export const obtenerProductos = async (req, res) => {
 
 export const obtenerProductoPorId = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Solo los administradores pueden realizar esta operación" });
+    }
+
     const producto = await Producto.findOne({
       where: { id: req.params.id, activo: true },
       include: [{ model: Categoria, attributes: ['id', 'nombre'] }]
